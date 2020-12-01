@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -15,18 +16,23 @@
 		}
 
 	</style>
+
+	{% block head %}{% endblock %}
 </head>
 <body>
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 border-bottom shadow-sm bg-blue">
 	  <h5 class="my-0 mr-md-auto font-weight-normal">Running club KRONBARS</h5>
 	  <nav class="my-2 my-md-0 mr-md-3">
 		<a class="p-2 text-dark" href="#">News</a>
-		<a class="p-2 text-dark" href="#">Edit profile</a>
-		<a class="p-2 text-dark" href="#">Leave</a>
+		  {% block link %} {% endblock %}
+<!--		<a class="p-2 text-dark" href="#">Edit profile</a>
+		<a class="p-2 text-dark" href="#">Leave</a>   -->
 	  </nav>
 	</div>
 
-	{% block content %}{% endblock %}
+	<div class="container">
+		{% block content %}{% endblock %}
+	</div>
 
 </body>
 </html>
