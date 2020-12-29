@@ -13,9 +13,27 @@
 {% endblock %}
 
 {% block content %}
+<div class='container registration'>
 
-<div class='registration'>
-		<button onclick="document.getElementById('id01').style.display='block'" style="width:200px; height: 100px">Sign Up</button>
+	<div class="welcome">
+		<h3>Приветственное слово</h3>
+		<br>
+		<p>Важная информация про веб-приложение, зачем и для чего оно нужно, что умеет.
+			<br>
+			Возможно, будет содержать фотографии инструкции пользования приложением...
+		</p>
+		<p>
+			<div style="width: 30%; margin-left: 10%">
+				Если ты новичок в нашем проекте, то регистрация здесь
+			</div>
+			<div style="width: 30%; margin: -30px 0 10% 55%; ">
+				Для авторизации жми сюда
+			</div>
+		</p>
+	</div>
+
+
+		<button onclick="document.getElementById('id01').style.display='block'" style="width:100px; height: 50px; margin-left: 30%";>Sign Up</button>
 
 		<div id="id01" class="modal1">
 		  <span onclick="document.getElementById('id01').style.display='none'" class="close1" title="Close Modal">×</span>
@@ -49,7 +67,7 @@
 
 
 
-		<button onclick="document.getElementById('id02').style.display='block'" style="width:200px; height:100px; margin-left:55px">Login</button>
+		<button onclick="document.getElementById('id02').style.display='block'" style="width:100px; height:50px; margin-left:20%">Login</button>
 
 		<div id="id02" class="modal">
 
@@ -80,6 +98,9 @@
 		</div>
 
 	</div>
+
+
+
 	<script>
 		// Get the modal
 		var modal = document.getElementById('id01');
@@ -100,6 +121,8 @@
 			}
 		}
 	</script>
+
+
 
 
 {% endblock %}

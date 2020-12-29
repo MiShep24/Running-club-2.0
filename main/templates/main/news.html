@@ -1,0 +1,24 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Информация о пробежках</h2><br>
+    {% for el in news %}
+        <div class="alert alert-warning mt-2">
+            <h3>{{ el.title }}</h3>
+            <p>{{ el.mainText }}</p>
+            <p>{{ el.timeDate }}</p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
