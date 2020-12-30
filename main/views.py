@@ -10,11 +10,8 @@ def index(request):
 
 def news(request):
     adminNews = News.objects.all()
-    return render(request, 'main/news.html', {'title': 'Новости', 'news': adminNews})
-
-
-def profile(request):
-    return render(request, 'main/profile.html')
+    listNews = adminNews.order_by('-id')
+    return render(request, 'main/news.html', {'title': 'Новости', 'listNews': listNews})
 
 
 def registration(request):
@@ -31,3 +28,11 @@ def registration(request):
         data['form'] = form
         return render(request, 'main/registration.html', data)
     return render(request, 'main/registration.html', data)
+
+
+def auth(request):
+    return render(request, 'main/auth.html')
+
+
+def profile(request):
+    return render(request, 'main/profile.html')
