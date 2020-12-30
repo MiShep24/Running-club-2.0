@@ -13,12 +13,18 @@
 {% block content %}
 <div class="container">
     <h2>Информация о пробежках</h2><br>
-    {% for el in news %}
+    {% if listNews %}
+        {% for el in listNews %}
+            <div class="alert alert-warning mt-2">
+                <h3>{{ el.title }}</h3>
+                <p>{{ el.mainText }}</p>
+                <p>{{ el.timeDate }}</p>
+            </div>
+        {% endfor %}
+    {% else %}
         <div class="alert alert-warning mt-2">
-            <h3>{{ el.title }}</h3>
-            <p>{{ el.mainText }}</p>
-            <p>{{ el.timeDate }}</p>
-        </div>
-    {% endfor %}
+                <h3>Здесь пока ничего нет!</h3>
+            </div>
+    {% endif %}
 </div>
 {% endblock %}
