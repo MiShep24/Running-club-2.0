@@ -1,0 +1,56 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block title %}
+Беговой клуб KRONBARS
+{% endblock %}
+
+{% block head %}
+
+<link rel="stylesheet" href="{% static 'main/css/registration.css' %}"/>
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <a href="{% url 'home' %}" style="color: black"><button style="background: #f44336">Вернуться на главную страницу</button></a>
+    <br>
+    <form class="modal1-content" method="POST">
+			  {% csrf_token %}
+			<div class="container">
+			  <h1>Регистрация</h1>
+			  <p>Пожалуйста, заполните эту форму, чтобы создать учетную запись.</p>
+			  <hr>
+                <label for="username"><b>Номер ИСУ</b></label>
+				{{ form.username }}
+				<label for="firstname"><b>Имя</b></label>
+				{{ form.firstname }}
+<!--			  <input type="text" placeholder="Ваше имя" name="firstname" required> -->
+				<label for="lastname"><b>Фамилия</b></label>
+				{{ form.lastname }}
+<!--			  <input type="text" placeholder="Ваша фамилия" name="lastname" required> -->
+
+<!--			  <input type="text" placeholder="Ваш номер ИСУ" name="isu" required> -->
+			  <label for="email"><b>Почта</b></label>
+				{{ form.email }}
+                <br><br>
+<!--			  <input type="text" placeholder="Ваш Email" name="email" required> -->
+			  <label for="password1"><b>Пароль</b></label>
+				{{ form.password1 }}
+<!--			  <input type="password" placeholder="Придумайте пароль" name="psw" required> -->
+			  <label for="password2"><b>Повторите пароль</b></label>
+				{{ form.password2 }}
+<!--			  <input type="password" placeholder="Повторите пароль" name="psw-repeat" required> -->
+			  <label>
+				<input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember me
+			  </label>
+
+			  <div class="clearfix1">
+
+				<button type="submit" class="signupbtn">Отправить</button>
+			  </div>
+			</div>
+		  </form>
+    </div>
+{% endblock %}
