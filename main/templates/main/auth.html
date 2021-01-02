@@ -16,26 +16,28 @@
 	<div class="container">
 		<a href="{% url 'home' %}" style="color: black"><button style="background: #f44336">Вернуться на главную страницу</button></a>
 		<br>
-    <form class="modal-content animate">
+    <form class="modal-content animate" method="POST">
+		{% csrf_token %}
 			<div class="imgcontainer">
-			  <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">×</span>
 			  <img src="{% static 'main/img/img_avatar2.jpg' %}" alt="Avatar" class="avatar">
 			</div>
 
 			<div class="container">
-			  <label for="uname"><b>Username</b></label>
-			  <input type="text" placeholder="Enter Username" name="uname" required>
+			  <label for="username"><b>Номер ИСУ</b></label>
+				{{ form.username }}
+<!--			  <input type="text" placeholder="Enter Username" name="uname" required> -->
 
-			  <label for="psw"><b>Password</b></label>
-			  <input type="password" placeholder="Enter Password" name="psw" required>
+			  <label for="password"><b>Пароль</b></label>
+				{{ form.password }}
+<!--			  <input type="password" placeholder="Enter Password" name="psw" required> -->
 
-			  <button type="submit">Login</button>
+			  <button type="submit">Авторизоваться</button>
 			  <label>
 				<input type="checkbox" checked="checked" name="remember"> Remember me
 			  </label>
 
 			</div>
-			  <span class="psw">Forgot <a href="#">password?</a></span>
+			  <span class="psw">Забыли <a href="#">пароль?</a></span>
 		  </form>
 	</div>
 {% endblock %}
