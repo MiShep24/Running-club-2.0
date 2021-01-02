@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from .models import News
 from .forms import RegistrationForm
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import authenticate, login, logout
 
 
 def index(request):
@@ -31,6 +33,23 @@ def registration(request):
 
 
 def auth(request):
+    data = {}
+    if request.method == 'POST':
+        fm = AuthenticationForm(request, request.POST)
+        if fm.is_valid():
+            user_name = fm.cleaned_data['username']
+            user_pass = fm.cleaned_data['password']
+            user = authenticate(user_name, user_pass)
+            data['fm'] = fm
+            data['res'] = "Успешно!"
+            if user is not None:
+                login(request, user)
+                return HttpResponseRedirect('profile')
+        else:
+            fm = AuthenticationForm()
+            data['fm'] = fm
+            return render(request, 'main/auth.html')
+
     return render(request, 'main/auth.html')
 
 
