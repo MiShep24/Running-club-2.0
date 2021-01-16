@@ -2,8 +2,11 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from .models import News
 from .forms import RegistrationForm
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib import auth
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.db import connection
 
 
 def index(request):
@@ -13,6 +16,7 @@ def index(request):
 def news(request):
     adminNews = News.objects.all()
     listNews = adminNews.order_by('-id')
+    print(listNews)
     return render(request, 'main/news.html', {'title': 'Новости', 'listNews': listNews})
 
 
@@ -35,23 +39,35 @@ def registration(request):
 def auth(request):
     data = {}
     if request.method == 'POST':
-        fm = AuthenticationForm(request, request.POST)
-        if fm.is_valid():
-            user_name = fm.cleaned_data['username']
-            user_pass = fm.cleaned_data['password']
-            user = authenticate(user_name, user_pass)
-            data['fm'] = fm
-            data['res'] = "Успешно!"
-            if user is not None:
-                login(request, user)
-                return HttpResponseRedirect('profile')
-        else:
-            fm = AuthenticationForm()
-            data['fm'] = fm
-            return render(request, 'main/auth.html')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
-    return render(request, 'main/auth.html')
+        user = authenticate(request, username=username, password=password)
+        print(type(user))
+        if user is not None:
+            login(request, user)
+            return redirect('profile/{}'.format(request.user.username))
+
+    return render(request, 'main/auth.html', data)
 
 
-def profile(request):
-    return render(request, 'main/profile.html')
+@login_required
+def profile(request, username):
+    all_student = User.objects.all()
+    for student in all_student:
+        if str(student) == username:
+            logStudent = student
+#    print(type(logStudent))
+    title = str(logStudent.first_name) + ' ' + str(logStudent.last_name)
+    return render(request, 'main/profile.html', {'title': title, 'logStudent': logStudent, 'username': username})
+
+
+def logout(request):
+    auth.logout(request)
+    return redirect('/')
+
+
+def edit_profile(request):
+    return render(request, 'main/edit_profile.html')
+
+
