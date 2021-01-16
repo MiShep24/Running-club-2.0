@@ -22,20 +22,15 @@
 			  <h1>Регистрация</h1>
 			  <p>Пожалуйста, заполните эту форму, чтобы создать учетную запись.</p>
 			  <hr>
+				<label for="email"><b>Почта</b></label>
+				{{ form.email }} <br><br>
                 <label for="username"><b>Номер ИСУ</b></label>
 				{{ form.username }}
-				<label for="firstname"><b>Имя</b></label>
-				{{ form.firstname }}
-<!--			  <input type="text" placeholder="Ваше имя" name="firstname" required> -->
-				<label for="lastname"><b>Фамилия</b></label>
-				{{ form.lastname }}
-<!--			  <input type="text" placeholder="Ваша фамилия" name="lastname" required> -->
+				<label for="first_name"><b>Имя</b></label>
+				{{ form.first_name }}
+				<label for="last_name"><b>Фамилия</b></label>
+				{{ form.last_name }}
 
-<!--			  <input type="text" placeholder="Ваш номер ИСУ" name="isu" required> -->
-			  <label for="email"><b>Почта</b></label>
-				{{ form.email }}
-                <br><br>
-<!--			  <input type="text" placeholder="Ваш Email" name="email" required> -->
 			  <label for="password1"><b>Пароль</b></label>
 				{{ form.password1 }}
 <!--			  <input type="password" placeholder="Придумайте пароль" name="psw" required> -->
