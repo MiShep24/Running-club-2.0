@@ -19,7 +19,7 @@
     <form class="modal-content animate" method="POST">
 		{% csrf_token %}
 
-			<div class="container">
+	<!--		<div class="container">
 			  <label for="birth"><b>Дата рождения</b></label> <br>
 			  <input type="date" placeholder="Дата рождения" name="birth" style="border: none; background: #f1f1f1;
 			  			margin: 5px 0 22px 0; display: inline-block; padding: 15px;" required><br>
@@ -36,7 +36,10 @@
 
 			  <button type="submit">Сохранить</button>
 
-			</div>
+			</div> -->
+		{{ user_form.as_p }}
+  		{{ profile_form.as_p }}
+  		<button type="submit">Save changes</button>
 		  </form>
 	</div>
 {% endblock %}
