@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from .models import News
 from .forms import RegistrationForm
-from django.contrib import auth
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -53,17 +52,28 @@ def auth(request):
 
 @login_required
 def profile(request, username):
-    all_student = User.objects.all()
-    for student in all_student:
-        if str(student) == username:
-            logStudent = student
-#    print(type(logStudent))
-    title = str(logStudent.first_name) + ' ' + str(logStudent.last_name)
-    return render(request, 'main/profile.html', {'title': title, 'logStudent': logStudent, 'username': username})
+    active_person = request.user.username
+    if str(active_person) == username:
+        all_student = User.objects.all()
+        for student in all_student:
+            if str(student) == username:
+                logStudent = student
+    #    print(type(logStudent))
+        title = str(logStudent.first_name) + ' ' + str(logStudent.last_name)
+        return render(request, 'main/profile.html', {'title': title, 'logStudent': logStudent, 'username': username})
+    else:
+        all_student = User.objects.all()
+        for student in all_student:
+            if str(student) == username:
+                logStudent = student
+        #    print(type(logStudent))
+        title = str(logStudent.first_name) + ' ' + str(logStudent.last_name)
+        return render(request, 'main/profile.html', {'title': title, 'logStudent': logStudent})
 
 
-def logout(request):
-    auth.logout(request)
+@login_required
+def leave_profile(request):
+    logout(request)
     return redirect('/')
 
 
