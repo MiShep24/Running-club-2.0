@@ -12,7 +12,7 @@
 {% block link %}
 {% if user.username %}
     <a class="p-2 text-dark" href="{% url 'edit' %}">Edit Profile</a>
-    <a class="p-2 text-dark" href="{% url 'home' %}">Leave</a>
+    <a class="p-2 text-dark" href="{% url 'leave_profile' %}">Leave</a>
 {% endif %}
 {% endblock %}
 
@@ -27,7 +27,7 @@
         <h3>Дополнительная информация</h3>
     </div>
 </div>
-{% if user.username %}
+{% if username %}
     <form method="post">
         <div class="container">
             <input type="text" placeholder="Ссылка на тренировку в Strava" name="train_link" style="width:85%; height: 50px; margin: 10px; border: none;" required>
