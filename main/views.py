@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from .models import News
-from .forms import RegistrationForm
+from .forms import RegistrationForm, UserForm, ProfileForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.db import connection
+from django.db import connection, transaction
+from django.contrib import messages
+from django.template import RequestContext
 
 
 def index(request):
@@ -27,8 +29,10 @@ def registration(request):
             form.save()
             data['form'] = form
             data['res'] = "Все прошло успешно"
-            return redirect('/')
+            print(data['res'])
+            return redirect('auth')
     else:
+        print('pachemy')
         form = RegistrationForm()
         data['form'] = form
         return render(request, 'main/registration.html', data)
@@ -77,7 +81,26 @@ def leave_profile(request):
     return redirect('/')
 
 
+@login_required
+@transaction.atomic
 def edit_profile(request):
-    return render(request, 'main/edit_profile.html')
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = ProfileForm(request.POST, instance=request.user.profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, _('Your profile was successfully updated!'))
+            return redirect('settings:profile')
+        else:
+            messages.error(request, _('Please correct the error below.'))
+    else:
+        user_form = UserForm(instance=request.user)
+        profile_form = ProfileForm(instance=request.user.profile)
+    return render(request, 'profiles/profile.html', {
+        'user_form': user_form,
+        'profile_form': profile_form
+    })
+#    return render(request, 'main/edit_profile.html')
 
 
