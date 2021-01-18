@@ -21,10 +21,10 @@
     <h1>{{ logStudent.first_name }} {{ logStudent.last_name }}</h1><br>
     <div class="alert alert-warning mt-2">
         <h3>Номер ИСУ (Номер студенческого билета): {{ logStudent.username }}</h3>
-        <h3>Дата рождения</h3>
-        <h3>Мегафакультет</h3>
-        <h3>Номер группы</h3>
-        <h3>Дополнительная информация</h3>
+        <h3>Дата рождения: {{ logStudent.profile.birth }}</h3>
+        <h3>Мегафакультет: {{ logStudent.profile.megafaculty }}</h3>
+        <h3>Номер группы: {{ logStudent.profile.group }}</h3>
+        <h3>Дополнительная информация: {{ logStudent.profile.info }}</h3>
     </div>
 </div>
 {% if username %}
