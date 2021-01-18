@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
-from .models import News
+from .models import News, Profile
 from .forms import RegistrationForm, UserForm, ProfileForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -56,14 +56,9 @@ def auth(request):
 
 @login_required
 def profile(request, username):
-    active_person = request.user.username
-    if str(active_person) == username:
-        all_student = User.objects.all()
-        for student in all_student:
-            if str(student) == username:
-                logStudent = student
-    #    print(type(logStudent))
-        title = str(logStudent.first_name) + ' ' + str(logStudent.last_name)
+    logStudent = request.user
+    if str(logStudent.username) == username:
+        title = logStudent.get_full_name()
         return render(request, 'main/profile.html', {'title': title, 'logStudent': logStudent, 'username': username})
     else:
         all_student = User.objects.all()
@@ -84,20 +79,24 @@ def leave_profile(request):
 @login_required
 @transaction.atomic
 def edit_profile(request):
+    try:
+        profile = request.user.profile
+    except Profile.DoesNotExist:
+        profile = Profile(user=request.user)
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=request.user)
         profile_form = ProfileForm(request.POST, instance=request.user.profile)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            messages.success(request, _('Your profile was successfully updated!'))
-            return redirect('settings:profile')
+            messages.success(request, ('Your profile was successfully updated!'))
+            return redirect('profile', request.user.username)
         else:
-            messages.error(request, _('Please correct the error below.'))
+            messages.error(request, ('Please correct the error below.'))
     else:
         user_form = UserForm(instance=request.user)
         profile_form = ProfileForm(instance=request.user.profile)
-    return render(request, 'profiles/profile.html', {
+    return render(request, 'main/edit_profile.html', {
         'user_form': user_form,
         'profile_form': profile_form
     })

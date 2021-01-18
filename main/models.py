@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import datetime
 
 
 # Create your models here.
@@ -21,8 +22,10 @@ class News(models.Model):
 
 
 class Profile(models.Model):
+    DoesNotExist = None
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     birth = models.DateTimeField('Дата рождения')
+    birth.strftime("%d %b, %Y")
     megafaculty = models.CharField('Мегафакультет', max_length=30)
     group = models.CharField('Номер группы', max_length=10)
     info = models.TextField('Дополнительная нформация')
