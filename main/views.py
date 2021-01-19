@@ -1,13 +1,15 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
-from .models import News, Profile
-from .forms import RegistrationForm, UserForm, ProfileForm
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
-from django.db import connection, transaction
+import json
+import requests
+from bs4 import BeautifulSoup
 from django.contrib import messages
-from django.template import RequestContext
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.db import transaction
+from django.shortcuts import render, redirect
+
+from .forms import RegistrationForm, UserForm, ProfileForm
+from .models import News, Profile, RunPosts
 
 
 def index(request):
@@ -46,7 +48,6 @@ def auth(request):
         password = request.POST.get('password')
 
         user = authenticate(request, username=username, password=password)
-        print(type(user))
         if user is not None:
             login(request, user)
             return redirect('profile/{}'.format(request.user.username))
@@ -56,16 +57,25 @@ def auth(request):
 
 @login_required
 def profile(request, username):
-    logStudent = request.user
-    if str(logStudent.username) == username:
-        title = logStudent.get_full_name()
-        return render(request, 'main/profile.html', {'title': title, 'logStudent': logStudent, 'username': username})
+    active_person = request.user.username
+    print(request.user.id)
+    posts = RunPosts.objects.all().filter(user=request.user)
+    #print(type(list_posts), list_posts)
+    list_posts = posts.order_by("-id")
+    if str(active_person) == username:
+        all_student = User.objects.all()
+        for student in all_student:
+            if str(student) == username:
+                logStudent = student
+        title = str(logStudent.first_name) + ' ' + str(logStudent.last_name)
+
+        return render(request, 'main/profile.html', {'title': title, 'logStudent': logStudent, 'username': username,
+                                                     'list_posts': list_posts})
     else:
         all_student = User.objects.all()
         for student in all_student:
             if str(student) == username:
                 logStudent = student
-        #    print(type(logStudent))
         title = str(logStudent.first_name) + ' ' + str(logStudent.last_name)
         return render(request, 'main/profile.html', {'title': title, 'logStudent': logStudent})
 
@@ -100,6 +110,24 @@ def edit_profile(request):
         'user_form': user_form,
         'profile_form': profile_form
     })
-#    return render(request, 'main/edit_profile.html')
 
 
+def new_post(request, username):
+    if request.method == 'POST':
+        url = request.POST.get('train_link')
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'lxml')
+    item = soup.select_one("[data-react-class='ActivityPublic']")
+    name_train = json.loads(item.get("data-react-props"))['activity']['name']
+    time_quotes = json.loads(item.get("data-react-props"))['activity']['date']
+    name_student = json.loads(item.get("data-react-props"))['activity']['athlete']['name']
+    run_distance = json.loads(item.get("data-react-props"))['activity']['distance']
+    run_time = json.loads(item.get("data-react-props"))['activity']['time']
+    active_name = request.user.first_name + ' ' + request.user.last_name
+    if active_name == name_student:
+        RunPosts.objects.create(name=name_train, link_post=url, distance=run_distance, run_time=run_time,
+                                date_running=time_quotes, user=request.user)
+        
+    else:
+        print("Это не ваша тренировка!")
+    return redirect('profile', username)

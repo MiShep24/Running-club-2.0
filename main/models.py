@@ -24,8 +24,7 @@ class News(models.Model):
 class Profile(models.Model):
     DoesNotExist = None
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    birth = models.DateTimeField('Дата рождения')
-    birth.strftime("%d %b, %Y")
+    birth = models.DateField('Дата рождения (DD.MM.YYYY)')
     megafaculty = models.CharField('Мегафакультет', max_length=30)
     group = models.CharField('Номер группы', max_length=10)
     info = models.TextField('Дополнительная нформация')
@@ -33,14 +32,22 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
-'''
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
+    class Meta:
+        verbose_name = 'Профиль'
+        verbose_name_plural = 'Профили'
 
 
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
-'''
+class RunPosts(models.Model):
+    name = models.CharField('Название тренировки', max_length=150)
+    link_post = models.TextField('Ссылка на пост в Strava')
+    distance = models.CharField('Дистанция', max_length=15)
+    run_time = models.CharField('Итоговое время', max_length=20)
+    date_running = models.CharField('Дата тренировки', max_length=30)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Пост'
+        verbose_name_plural = 'Посты'
