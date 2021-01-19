@@ -14,32 +14,15 @@
 
 {% block content %}
 	<div class="container">
-		<a href="#" style="color: black"><button style="background: #f44336">Вернуться</button></a>
+		<a href="{% url 'profile' user.username %}" style="color: black"><button style="background: #f44336">Вернуться</button></a>
 		<br>
-    <form class="modal-content animate" method="POST">
+    <form class="modal-content animate" style="padding: 10px; border: none;" method="POST">
 		{% csrf_token %}
 
-	<!--		<div class="container">
-			  <label for="birth"><b>Дата рождения</b></label> <br>
-			  <input type="date" placeholder="Дата рождения" name="birth" style="border: none; background: #f1f1f1;
-			  			margin: 5px 0 22px 0; display: inline-block; padding: 15px;" required><br>
-
-			  <label for="faculty"><b>Мегафакультет</b></label>
-			  <input type="text" placeholder="Мегафакультет" name="faculty" required>
-
-                <label for="group"><b>Номер группы</b></label>
-			  <input type="text" placeholder="Группа" name="group" required>
-
-                <label for="info"><b>Дополнительно о себе</b></label><br>
-			  <input type="area" placeholder="Информация о Вас" name="info" style="border: none; background: #f1f1f1;
-			  			margin: 5px 0 22px 0; display: inline-block; padding: 15px; width: 100%;" required>
-
-			  <button type="submit">Сохранить</button>
-
-			</div> -->
 		{{ user_form.as_p }}
   		{{ profile_form.as_p }}
-  		<button type="submit">Save changes</button>
+
+		<button type="submit">Сохранить</button>
 		  </form>
 	</div>
 {% endblock %}
