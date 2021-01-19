@@ -128,5 +128,5 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-LOGIN_REDIRECT_URL = 'home'
-LOGIN_URL = '/'
+LOGIN_REDIRECT_URL = 'auth'
+LOGIN_URL = '/authorisation'
