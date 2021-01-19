@@ -34,7 +34,6 @@ def registration(request):
             print(data['res'])
             return redirect('auth')
     else:
-        print('pachemy')
         form = RegistrationForm()
         data['form'] = form
         return render(request, 'main/registration.html', data)
@@ -58,11 +57,9 @@ def auth(request):
 @login_required
 def profile(request, username):
     active_person = request.user.username
-    print(request.user.id)
-    posts = RunPosts.objects.all().filter(user=request.user)
-    #print(type(list_posts), list_posts)
-    list_posts = posts.order_by("-id")
     if str(active_person) == username:
+        posts = RunPosts.objects.all().filter(user=request.user)
+        list_posts = posts.order_by("-id")
         all_student = User.objects.all()
         for student in all_student:
             if str(student) == username:
@@ -76,8 +73,11 @@ def profile(request, username):
         for student in all_student:
             if str(student) == username:
                 logStudent = student
+        posts = RunPosts.objects.all().filter(user=logStudent)
+        list_posts = posts.order_by("-id")
         title = str(logStudent.first_name) + ' ' + str(logStudent.last_name)
-        return render(request, 'main/profile.html', {'title': title, 'logStudent': logStudent})
+        return render(request, 'main/profile.html', {'title': title, 'logStudent': logStudent,
+                                                     'list_posts': list_posts})
 
 
 @login_required
@@ -112,22 +112,39 @@ def edit_profile(request):
     })
 
 
+@login_required
 def new_post(request, username):
     if request.method == 'POST':
         url = request.POST.get('train_link')
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, 'lxml')
-    item = soup.select_one("[data-react-class='ActivityPublic']")
-    name_train = json.loads(item.get("data-react-props"))['activity']['name']
-    time_quotes = json.loads(item.get("data-react-props"))['activity']['date']
-    name_student = json.loads(item.get("data-react-props"))['activity']['athlete']['name']
-    run_distance = json.loads(item.get("data-react-props"))['activity']['distance']
-    run_time = json.loads(item.get("data-react-props"))['activity']['time']
-    active_name = request.user.first_name + ' ' + request.user.last_name
-    if active_name == name_student:
-        RunPosts.objects.create(name=name_train, link_post=url, distance=run_distance, run_time=run_time,
-                                date_running=time_quotes, user=request.user)
-        
-    else:
-        print("Это не ваша тренировка!")
-    return redirect('profile', username)
+
+    try:
+        response = requests.get(url)
+        soup = BeautifulSoup(response.text, 'lxml')
+        item = soup.select_one("[data-react-class='ActivityPublic']")
+        name_train = json.loads(item.get("data-react-props"))['activity']['name']
+        time_quotes = json.loads(item.get("data-react-props"))['activity']['date']
+        name_student = json.loads(item.get("data-react-props"))['activity']['athlete']['name']
+        run_distance = json.loads(item.get("data-react-props"))['activity']['distance']
+        run_time = json.loads(item.get("data-react-props"))['activity']['time']
+        active_name = request.user.first_name + ' ' + request.user.last_name
+        if item is None:
+            messages.error(request, "Too many requests!")
+            return redirect('profile', username)
+
+        if active_name == name_student:
+            RunPosts.objects.create(name=name_train, link_post=url, distance=run_distance, run_time=run_time,
+                                    date_running=time_quotes, user=request.user)
+        else:
+            messages.error(request, "Это не ваша тренировка!")
+        return redirect('profile', username)
+
+    except:
+        messages.error(request, "Неверная ссылка! Ссылка должна содержать информацию о тренировке! Пример ссылки: "
+                                "https://www.strava.com/activities/<id_activities>")
+        return redirect('profile', username)
+
+
+def all_profiles(request):
+    all_users = User.objects.all()
+    list_users = all_users.order_by("username")
+    return render(request, 'main/all_users.html', {'title': 'Все пользователи', 'list_users': list_users})
