@@ -9,6 +9,15 @@
 {% block head %}
 
 {% endblock %}
+{% block main_page %}
+    {% if user.username %}
+
+        <a class="p-2 text-dark" href="{% url 'profile' user.username %}">Personal Page</a>
+
+    {% else %}
+            <a class="p-2 text-dark" href="{% url 'home' %}">Main page</a>
+    {% endif %}
+{% endblock %}
 
 {% block content %}
 <div class="container">

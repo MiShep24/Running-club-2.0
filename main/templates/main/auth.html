@@ -12,6 +12,10 @@
 
 {% endblock %}
 
+{% block main_page %}
+<a class="p-2 text-dark" href="{% url 'home' %}">Main page</a>
+{% endblock %}
+
 {% block content %}
 	<div class="container">
 		<a href="{% url 'home' %}" style="color: black"><button style="background: #f44336">Вернуться на главную страницу</button></a>

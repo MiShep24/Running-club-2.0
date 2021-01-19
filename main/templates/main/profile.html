@@ -8,13 +8,18 @@
 
 {% block head %}
 {% endblock %}
-
-{% block link %}
 {% if user.username %}
-    <a class="p-2 text-dark" href="{% url 'edit' %}">Edit Profile</a>
-    <a class="p-2 text-dark" href="{% url 'leave_profile' %}">Leave</a>
+    {% block main_page %}
+        <a class="p-2 text-dark" href="{% url 'profile' user.username %}">Personal Page</a>
+    {% endblock %}
+
+    {% block link %}
+
+        <a class="p-2 text-dark" href="{% url 'edit' %}">Edit Profile</a>
+        <a class="p-2 text-dark" href="{% url 'leave_profile' %}">Leave</a>
+
+    {% endblock %}
 {% endif %}
-{% endblock %}
 
 {% block content %}
 
@@ -48,7 +53,7 @@
                 <h5>Общее время тренировки: {{ el.run_time }}</h5>
                 <h5>Дата тренировки: {{ el.date_running }}</h5>
                 <h5>Пост в Strava: <a href="{{ el.link_post }}">{{ el.link_post }}</a> </h5>
-            </div><br><br>
+            </div><br>
         {% endfor %}
     {% else %}
         <div class="alert alert-warning mt-2">
