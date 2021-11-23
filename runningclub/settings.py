@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'main'
+    'main',
 ]
 
 MIDDLEWARE = [
@@ -75,13 +75,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'runningclub.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': '123456',
+        'HOST': 'dm_db',
+        'PORT': 5432
     }
 }
 
@@ -130,3 +131,11 @@ STATICFILES_DIRS = [
 
 LOGIN_REDIRECT_URL = 'auth'
 LOGIN_URL = '/authorisation'
+
+#ALLOWED_HOSTS = ['*']
+
+#STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+#DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
