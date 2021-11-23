@@ -1,0 +1,29 @@
+version: '3.0'
+
+services:
+  dm_db:
+    image: postgres:10.1-alpine
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+  django:
+    container_name: devops_runclub
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: bash -c "python /usr/src/runclub/manage.py makemigrations &&
+      python /usr/src/runclub/manage.py migrate --noinput && 
+      python /usr/src/runclub/manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/usr/src/runclub
+    ports:
+      - 8000:8000
+    depends_on:
+      - dm_db
+
+volumes:
+  pg_data:
+
