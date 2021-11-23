@@ -31,7 +31,6 @@ def registration(request):
             form.save()
             data['form'] = form
             data['res'] = "Все прошло успешно"
-            print(data['res'])
             return redirect('auth')
     else:
         form = RegistrationForm()
